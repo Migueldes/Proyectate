@@ -9,15 +9,15 @@ const StartLogin = ({ navigation }) => {
         style={styles.image}
       />
       
-      <Text style={styles.headerText}>Descubre tus inteligencias múltiples</Text>
+      <Text style={styles.headerText}>Descubre tus Estilos de Aprendizaje</Text>
       
       <Text style={styles.description}>
-        Haz el test de las inteligencias múltiples para descubrir qué tipo de inteligencia tienes.
+        Haz el test de las Estilos de Aprendizaje para descubrir qué tipo de inteligencia tienes.
       </Text>
       
       <TouchableOpacity 
         style={styles.button} 
-        onPress={() => navigation.navigate('QuestionScreen')} // Navegando a QuestionScreen
+        onPress={() => navigation.navigate('Cuestionario')} // Navegando a cuestionario
       >
         <Text style={styles.buttonText}>Comenzar Cuestionario</Text>
       </TouchableOpacity>
