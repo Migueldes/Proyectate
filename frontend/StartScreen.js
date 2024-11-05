@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-const StartLogin = ({ navigation }) => {
+const StartScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image 
-        source={{ uri: '' }} //Agregar una Imagen despues
+        source={require('./img/Portada.jpg')} //Agregar una Imagen despues
         style={styles.image}
       />
       
@@ -28,41 +28,43 @@ const StartLogin = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#F3F4F6',
     alignItems: 'center',
-    padding: 20,
-    backgroundColor: '#f5f5f5',
+    justifyContent: 'center',
+    paddingHorizontal: 20,
   },
   image: {
     width: '100%',
     height: 200,
+    resizeMode: 'cover',
     borderRadius: 10,
     marginBottom: 20,
   },
   headerText: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     color: '#333',
     textAlign: 'center',
-    marginBottom: 10,
+    marginVertical: 10,
   },
   description: {
-    fontSize: 14,
-    color: '#777',
+    fontSize: 16,
+    color: '#555',
     textAlign: 'center',
     marginBottom: 30,
   },
   button: {
-    backgroundColor: '#007bff',
-    paddingVertical: 15,
+    backgroundColor: '#6C63FF',
+    paddingVertical: 12,
     paddingHorizontal: 30,
-    borderRadius: 5,
+    borderRadius: 8,
+    elevation: 3,
   },
   buttonText: {
-    color: '#fff',
+    color: '#FFF',
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: 'bold',
   },
 });
 
-export default StartLogin;
+export default StartScreen;
