@@ -160,4 +160,4 @@ console.log(`Porcentaje Cinestésico: ${resultado.cinestecico.toFixed(2)}%`);
   //  return prediccion
 //}
 
-//module.exports = procesoIA;
+export default usuarioPromedio;
