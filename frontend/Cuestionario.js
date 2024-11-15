@@ -27,35 +27,62 @@ const preguntas = [
 
 
 const Cuestionario = ({ navigation }) => {
+  // Aquí almacenamos las respuestas. Por defecto, está vacío para cada pregunta.
   const [respuestas, setRespuestas] = useState(Array(preguntas.length).fill(''));
 
-  const handleGuardarRespuestas = () => {
-    const allAnswered = respuestas.every(option => option !== '');
+  // Función para guardar las respuestas y asegurarse de que no falte ninguna.
+  const handleGuardarRespuestas = async () => {
+    // Aseguramos que todas las preguntas están respondidas
+    const allAnswered = respuestas.every((option) => option !== '');
     if (!allAnswered) {
-      Alert.alert("Debes de llenar todo el cuestionario");
+      Alert.alert('Por favor, responde todas las preguntas.');
       return;
     }
-
-    console.log('Respuestas guardadas:', respuestas);
-    navigation.navigate('Resultado');
+  
+    try {
+      // Enviamos solo el arreglo de respuestas al backend
+      const response = await fetch('http://192.168.0.8:3000/cuestionario/procesamiento', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(respuestas), // Enviar solo el array directamente
+      });
+  
+      if (!response.ok) throw new Error('Error al procesar el cuestionario.');
+  
+      // Recibimos la respuesta del backend
+      const data = await response.json();
+      console.log('Respuesta del backend:', data);
+  
+      // Navegamos a la pantalla de resultados
+      navigation.navigate('Resultado', { resultado: data.resultado });
+    } catch (error) {
+      console.error('Error al enviar las respuestas:', error);
+      Alert.alert('Error', 'No se pudo conectar con el servidor.');
+    }
   };
+  
+  
 
+  // Esta función renderiza cada pregunta y sus opciones.
   const renderItem = ({ item, index }) => (
-    <View style={styles.questionContainer}>
+    <View key={item.id} style={styles.questionContainer}>
+      {/* Mostramos el texto de la pregunta */}
       <Text style={styles.question}>{index + 1}. {item.pregunta}</Text>
+
+      {/* Usamos RadioButton.Group para mostrar las opciones */}
       <RadioButton.Group
         onValueChange={(value) => {
           const newRespuestas = [...respuestas];
-          newRespuestas[index] = value;
-          setRespuestas(newRespuestas);
+          newRespuestas[index] = value; // Actualizamos la respuesta seleccionada
+          setRespuestas(newRespuestas); // Guardamos las respuestas en el estado
         }}
-        value={respuestas[index]}
+        value={respuestas[index]} // Mostramos la respuesta seleccionada
       >
         {item.opciones.map((opcion, opcionIndex) => (
           <RadioButton.Item
             key={opcionIndex}
-            label={opcion}
-            value={opcion[0]} // Solo escoge a, b ,c
+            label={opcion} // Mostramos la opción (a, b, c)
+            value={opcion[0]} // Guardamos solo "a", "b", "c"
           />
         ))}
       </RadioButton.Group>
@@ -63,18 +90,16 @@ const Cuestionario = ({ navigation }) => {
   );
 
   return (
-    
-      <ScrollView contentContainerStyle={styles.container}>
-        <Text style={styles.title}>Autoevaluación del Estilo de Aprendizaje</Text>
-        <Text style={styles.subtitle}>
-          Por favor, seleccione la opción que mejor describa su preferencia.
-        </Text>
-        {preguntas.map((item, index) => renderItem({ item, index }))}
-        <TouchableOpacity style={styles.button} onPress={handleGuardarRespuestas}>
-          <Text style={styles.buttonText}>Ver qué soy</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Autoevaluación del Estilo de Aprendizaje</Text>
+      <Text style={styles.subtitle}>Selecciona la opción que mejor te describe.</Text>
+      {/* Renderizamos cada pregunta */}
+      {preguntas.map((item, index) => renderItem({ item, index }))}
+      {/* Botón para enviar respuestas */}
+      <TouchableOpacity style={styles.button} onPress={handleGuardarRespuestas}>
+        <Text style={styles.buttonText}>Ver qué soy</Text>
+      </TouchableOpacity>
+    </ScrollView>
   );
 };
 

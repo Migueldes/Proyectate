@@ -54,7 +54,7 @@ function Probabilidad_priori() {
     let tablas_dicc = {};
     const etiquetas = ["cinestecico", "visual", "auditivo"];
     const salidas = ["a", "b", "c"];
-    const laplace = 1; //Valor de suavizado para que lso valores no lleguen a cero
+    const laplace = 1; //Valor de suavizado para que los valores no lleguen a cero
 
     // For anidados para crear las 20 tablas y sus combinaciones de elementos
     for (let i = 0; i < 20; i++) {
@@ -94,13 +94,15 @@ const tablas_dicc = Probabilidad_priori();
 // FIN DE LA FASE DE ENTRENAMIENTO
 
 //Funcion para el usuario o calculo final del teorema de bayes(naibes)
-function usuarioPromedio(usuario_x) {
+function usuarioPromedio(data) {
+    const usuario_x = data.respuestas; // Extraemos el array de respuestas del JSON recibido
+
     let p_Cinestecico_usuario = 1;
     let p_visual_usuario = 1;
     let p_auditivo_usuario = 1;
     // ^
     // |
-    // Se inicializan en 1 y no en cero por problemas de calculo debido a que debe ser constante y evitaer la probabilidad a 0%
+    // Se inicializan en 1 y no en cero por problemas de calculo debido a que debe ser constante y evitar la probabilidad a 0%
 
     for (let i = 0; i < usuario_x.length; i++) {
         const salida_usuario = usuario_x[i];
@@ -137,27 +139,4 @@ function usuarioPromedio(usuario_x) {
     };
 }
 
-// Simulación de respuestas recibidas del frontend (aquí son datos para probar) al final no se va a ocupar en el back
-const respuestasDelUsuario = ["b", "b", "c", "a", "b", "c", "a", "b", "c", "a", "b", 
-                              "a", "a", "b", "a", "a", "b", "c", "a", "b"];
-const resultado = usuarioPromedio(respuestasDelUsuario);
-
-// nota: el que va a ser la salida como tal seria llamar usuarioPromedio()
-
-console.log("Resultados:");
-console.log(`Porcentaje Visual: ${resultado.visual.toFixed(2)}%`);
-console.log(`Porcentaje Auditivo: ${resultado.auditivo.toFixed(2)}%`);
-console.log(`Porcentaje Cinestésico: ${resultado.cinestecico.toFixed(2)}%`);
-// ^
-// |
-// Este no importa mucho, ya que solo es ver que los datos salgan como deben
-
-//Cambiar form data por el dato para la prediccion
-//const procesoIA = async (formData) => {
-    //Codigo de IA con los datos del cuestionario
-
-
-  //  return prediccion
-//}
-
-export default usuarioPromedio;
+module.exports = usuarioPromedio;

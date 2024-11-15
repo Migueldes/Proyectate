@@ -1,43 +1,47 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 
-const Resultado = ({ navigation }) => {
-  const reiniciarApp = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Bienvenido' }],
-    });
-  };
+// Pantalla que muestra los resultados. Recibe datos desde "Cuestionario.js".
+const Resultado = ({ navigation, route }) => {
+  const { resultado } = route.params; // Obtenemos los datos pasados desde la pantalla anterior.
+  // Transformamos el objeto `resultado` en un array de objetos para ordenarlos dinámicamente.
+const resultadosOrdenados = Object.entries(resultado)
+  .map(([tipo, porcentaje]) => ({ tipo, porcentaje })) // Convertimos el objeto en un array de objetos
+  .sort((a, b) => b.porcentaje - a.porcentaje); // Ordenamos de mayor a menor porcentaje
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Resultado</Text>
-
+// Renderizamos cada resultado como una barra de progreso.
+const renderResultados = () => {
+  return resultadosOrdenados.map((res, index) => (
+    <View key={index} style={styles.resultItem}>
+      <Text style={styles.intelligenceType}>{res.tipo.charAt(0).toUpperCase() + res.tipo.slice(1)}</Text>
       <View style={styles.progressBarContainer}>
-        <View style={styles.progressBar}></View>
+        <View style={[styles.progressBar, { width: `${res.porcentaje}%` }]}></View>
       </View>
-
-      <Text style={styles.intelligenceType}>Inteligencia Musical</Text>
-      <Text style={styles.percentage}>71%</Text>
-      <Text style={styles.description}>
-        Has mostrado una fuerte inteligencia emocional. Eres sensible a los sonidos, ritmos y tonos.
-      </Text>
-
-      <Text style={styles.subheader}>Tus Inteligencias más próximas</Text>
-      <View style={styles.additionalIntelligences}>
-        <Text style={styles.additionalItem}>Lingüística</Text>
-        <Text style={styles.percentage}>15%</Text>
-      </View>
-      <View style={styles.additionalIntelligences}>
-        <Text style={styles.additionalItem}>Interpersonal</Text>
-        <Text style={styles.percentage}>14%</Text>
-      </View>
-
-      <TouchableOpacity style={styles.button} onPress={reiniciarApp}>
-        <Text style={styles.buttonText}>Finalizar</Text>
-      </TouchableOpacity>
+      <Text style={styles.percentage}>{res.porcentaje.toFixed(2)}%</Text>
     </View>
-  );
+  ));
+};
+
+const reiniciarApp = () => {
+  navigation.reset({
+    index: 0,
+    routes: [{ name: 'Bienvenido' }],
+  });
+};
+
+return (
+  <View style={styles.container}>
+    <Text style={styles.header}>Tus Resultados</Text>
+
+    {/* Renderizamos los resultados dinámicamente */}
+    {renderResultados()}
+
+    {/* Botón para reiniciar */}
+    <TouchableOpacity style={styles.button} onPress={reiniciarApp}>
+      <Text style={styles.buttonText}>Finalizar</Text>
+    </TouchableOpacity>
+  </View>
+);
 };
 
 const styles = StyleSheet.create({
@@ -54,6 +58,9 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 20,
   },
+  resultItem: {
+    marginBottom: 20,
+  },
   progressBarContainer: {
     height: 10,
     backgroundColor: '#E0E0E0',
@@ -62,7 +69,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   progressBar: {
-    width: '71%',
     height: '100%',
     backgroundColor: '#6C63FF',
     borderRadius: 5,
@@ -72,39 +78,13 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#333',
     textAlign: 'center',
-    marginVertical: 10,
   },
   percentage: {
-    fontSize: 28,
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#6C63FF',
     textAlign: 'center',
-    marginBottom: 20,
-  },
-  description: {
-    fontSize: 16,
-    color: '#555',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  subheader: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
     marginBottom: 10,
-  },
-  additionalIntelligences: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-  },
-  additionalItem: {
-    fontSize: 16,
-    color: '#555',
-  },
-  percentageSmall: {
-    fontSize: 16,
-    color: '#6C63FF',
   },
   button: {
     backgroundColor: '#6C63FF',

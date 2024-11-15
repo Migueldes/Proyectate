@@ -5,7 +5,7 @@ const StartScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Image 
-        source={require('./img/Portada.jpg')} //Agregar una Imagen despues
+        source={require('./img/Portada.jpg')}
         style={styles.image}
       />
       
