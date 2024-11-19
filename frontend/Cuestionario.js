@@ -41,7 +41,7 @@ const Cuestionario = ({ navigation }) => {
   
     try {
       // Enviamos solo el arreglo de respuestas al backend
-      const response = await fetch('http://192.168.0.8:3000/cuestionario/procesamiento', {
+      const response = await fetch('http://148.220.211.221:3000/cuestionario/procesamiento', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(respuestas), // Enviar solo el array directamente

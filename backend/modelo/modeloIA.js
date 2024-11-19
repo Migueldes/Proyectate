@@ -95,7 +95,7 @@ const tablas_dicc = Probabilidad_priori();
 
 //Funcion para el usuario o calculo final del teorema de bayes(naibes)
 function usuarioPromedio(data) {
-    const usuario_x = data.respuestas; // Extraemos el array de respuestas del JSON recibido
+    const usuario_x = data; // Extraemos el array de respuestas del JSON recibido
 
     let p_Cinestecico_usuario = 1;
     let p_visual_usuario = 1;
